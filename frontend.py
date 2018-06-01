@@ -35,9 +35,15 @@ def get_selected_row(event):
 
 def delete_command() :
 	backend.delete_data(selected_tuple[0])
-
+	list1.delete(0, tk.END)
+	list1.insert(tk.END, "Succesfully deleted ")
+	list1.insert(tk.END, selected_tuple)
+    
 def update_command() :
 	backend.update_data(selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
+	list1.delete(0, tk.END)
+	list1.insert(tk.END, "Succesfully updated to: ")
+	list1.insert(tk.END, (selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get()))
 
 window = tk.Tk()
 
