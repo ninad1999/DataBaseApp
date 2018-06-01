@@ -60,8 +60,3 @@ def update_data(id, title, author, year, isbn) :
 	 conn.close()
 
 connect()
-#insert_data("Game of Thrones", "George RR Martin", 2010, 574309587340903)
-#insert_data("A wise mans fear", "PRs", 2010, 574937954503)
-update_data(5, "Dance with dragons", "PR", 2011, 457409582)
-print(view_data())
-
