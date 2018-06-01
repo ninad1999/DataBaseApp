@@ -1,21 +1,23 @@
 import tkinter as tk
-import backend
+from backend import Database
+
+database = Database("books.db")
 
 def view_command() :
 	list1.delete(0, tk.END)
-	for row in backend.view_data():
+	for row in database.view_data():
 		list1.insert(tk.END, row)
 
 def search_command() :
 	list1.delete(0, tk.END)
-	for row in backend.search_data(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()) :
+	for row in database.search_data(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()) :
 		list1.insert(tk.END, row)
 
 def add_command() :
-	backend.insert_data(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()) 
+	database.insert_data(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()) 
 	list1.delete(0, tk.END)
 	list1.insert(tk.END, "Succesfully inserted: ")
-	list1.insert(tk.END, backend.view_data()[-1])
+	list1.insert(tk.END, database.view_data()[-1])
 
 def get_selected_row(event):
     try:
@@ -34,13 +36,13 @@ def get_selected_row(event):
         pass
 
 def delete_command() :
-	backend.delete_data(selected_tuple[0])
+	database.delete_data(selected_tuple[0])
 	list1.delete(0, tk.END)
 	list1.insert(tk.END, "Succesfully deleted ")
 	list1.insert(tk.END, selected_tuple)
     
 def update_command() :
-	backend.update_data(selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
+	database.update_data(selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
 	list1.delete(0, tk.END)
 	list1.insert(tk.END, "Succesfully updated to: ")
 	list1.insert(tk.END, (selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get()))
