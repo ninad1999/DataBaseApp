@@ -1,19 +1,43 @@
-"""
-	This app stores information of books:
-		Title, Author, Year, ISBN
-
-	User can:
-		View all records
-		Search an entry
-		Add an entry
-		Update an entry
-		Delete an entry
-		Exit App
-
-"""
-
 import tkinter as tk
 import backend
+
+def view_command() :
+	list1.delete(0, tk.END)
+	for row in backend.view_data():
+		list1.insert(tk.END, row)
+
+def search_command() :
+	list1.delete(0, tk.END)
+	for row in backend.search_data(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()) :
+		list1.insert(tk.END, row)
+
+def add_command() :
+	backend.insert_data(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()) 
+	list1.delete(0, tk.END)
+	list1.insert(tk.END, "Succesfully inserted: ")
+	list1.insert(tk.END, backend.view_data()[-1])
+
+def get_selected_row(event):
+    try:
+        global selected_tuple
+        index=list1.curselection()[0]
+        selected_tuple=list1.get(index)
+        e1.delete(0,tk.END)
+        e1.insert(tk.END,selected_tuple[1])
+        e2.delete(0,tk.END)
+        e2.insert(tk.END,selected_tuple[2])
+        e3.delete(0,tk.END)
+        e3.insert(tk.END,selected_tuple[3])
+        e4.delete(0,tk.END)
+        e4.insert(tk.END,selected_tuple[4])
+    except IndexError:
+        pass
+
+def delete_command() :
+	backend.delete_data(selected_tuple[0])
+
+def update_command() :
+	backend.update_data(selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
 
 window = tk.Tk()
 
@@ -45,27 +69,27 @@ isbn_text = tk.StringVar()
 e4 = tk.Entry(window, textvariable=isbn_text)
 e4.grid(row=1, column=3)
 
-b1 = tk.Button(window, text="View All")
+b1 = tk.Button(window, text="View All", command=view_command)
 b1.grid(row=2, column=3)
 b1.config(width=20)
 
-b2 = tk.Button(window, text="Search Entry")
+b2 = tk.Button(window, text="Search Entry", command=search_command)
 b2.grid(row=3, column=3)
 b2.config(width=20)
 
-b3 = tk.Button(window, text="Add Entry")
+b3 = tk.Button(window, text="Add Entry", command=add_command)
 b3.grid(row=4, column=3)
 b3.config(width=20)
 
-b1 = tk.Button(window, text="Update Entry")
+b1 = tk.Button(window, text="Update Selected", command=update_command)
 b1.grid(row=5, column=3)
 b1.config(width=20)
 
-b1 = tk.Button(window, text="Delete Entry")
+b1 = tk.Button(window, text="Delete Selected", command=delete_command)
 b1.grid(row=6, column=3)
 b1.config(width=20)
 
-b1 = tk.Button(window, text="Close")
+b1 = tk.Button(window, text="Close", command=window.destroy)
 b1.grid(row=7, column=3)
 b1.config(width=20)
 
@@ -77,5 +101,7 @@ sb1.grid(row=2, column=2, rowspan=6)
 
 list1.configure(yscrollcommand=sb1.set)
 sb1.configure(command=list1.yview)
+
+list1.bind("<<ListboxSelect>>", get_selected_row)
 
 window.mainloop()
